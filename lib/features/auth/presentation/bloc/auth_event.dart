@@ -9,7 +9,11 @@ sealed class AuthEvent extends Equatable {
 
 class CheckAuthUserEvent extends AuthEvent {}
 
-class SaveTokenEvent extends AuthEvent {}
+class SaveTokenEvent extends AuthEvent {
+  final Token token;
+
+  const SaveTokenEvent({required this.token});
+}
 
 class FetchTokenEvent extends AuthEvent {}
 

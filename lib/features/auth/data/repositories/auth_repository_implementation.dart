@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_ecommerce/core/failures/failure.dart';
 import 'package:flutter_ecommerce/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_ecommerce/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_ecommerce/features/auth/data/mappers/auth_mappers.dart';
 import 'package:flutter_ecommerce/features/auth/domain/entities/token.dart';
 import 'package:injectable/injectable.dart';
 
@@ -19,7 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> checkAuthUser() async {
     try {
-      await localDatasource.checkAuthenticateUser();
+      await localDatasource.getToken();
       return const Right(null);
     } on Exception catch (e) {
       return Left(Failure(message: e.toString()));
@@ -27,8 +28,12 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> saveToken(Token token) {
-    // TODO: implement saveToken
-    throw UnimplementedError();
+  Future<Either<Failure, void>> saveToken(Token token) async {
+    try {
+      await localDatasource.saveToken(token.toModel());
+      return const Right(null);
+    } on Exception catch (e) {
+      return Left(Failure(message: e.toString()));
+    }
   }
 }
