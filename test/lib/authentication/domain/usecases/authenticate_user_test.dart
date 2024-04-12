@@ -3,21 +3,23 @@ import 'package:flutter_ecommerce/core/failures/failure.dart';
 import 'package:flutter_ecommerce/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter_ecommerce/features/auth/domain/usecases/check_auth_user.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-class MockAuthenticationRepository extends Mock implements AuthRepository {}
+import 'authenticate_user_test.mocks.dart';
 
+@GenerateNiceMocks([MockSpec<AuthRepository>()])
 void main() {
   late CheckAuthUser useCase;
-  late MockAuthenticationRepository mockRepository;
+  late MockAuthRepository mockRepository;
   late CheckAuthUserParams checkAuthUserParams;
   setUp(() {
-    mockRepository = MockAuthenticationRepository();
+    mockRepository = MockAuthRepository();
     checkAuthUserParams = CheckAuthUserParams();
     useCase = CheckAuthUser(repository: mockRepository);
   });
 
-  group('CheckAuthUser with token', () {
+  group('CheckAuthUser', () {
     test('should call the CheckAuthUser method in the repository', () async {
       when(mockRepository.checkAuthUser())
           .thenAnswer((_) async => const Right(null));

@@ -3,18 +3,13 @@ import 'dart:convert';
 import 'package:flutter_ecommerce/core/failures/failure.dart';
 import 'package:flutter_ecommerce/features/auth/data/models/token_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:hive/hive.dart';
-import 'package:mockito/mockito.dart';
-
 import '../../../fixture_reader.dart';
 
-
-class MockHiveInterface extends Mock implements HiveInterface {}
-
-class MockHiveBox extends Mock implements Box {}
-
+@GenerateNiceMocks([MockSpec<HiveInterface>()])
+@GenerateNiceMocks([MockSpec<Box>()])
 void main() {
-
   group('getLastToken', () {
     final TokenModel tTokenModel =
         TokenModel.fromJson(jsonDecode(fixture('user_login.json')));

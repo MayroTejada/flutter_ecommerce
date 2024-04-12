@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_ecommerce/core/usecases/usecase.dart';
+import 'package:flutter_ecommerce/features/auth/domain/entities/token.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../core/failures/failure.dart';
 
@@ -14,11 +15,14 @@ class SaveToken implements UseCase<void, SaveTokenParams> {
 
   @override
   Future<Either<Failure, void>> call(SaveTokenParams params) async {
-    return repository.saveToken();
+    return repository.saveToken(params.token);
   }
 }
 
 class SaveTokenParams extends Equatable {
+  final Token token;
+
+  const SaveTokenParams({required this.token});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [token];
 }
