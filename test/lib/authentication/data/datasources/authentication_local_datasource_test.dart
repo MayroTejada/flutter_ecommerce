@@ -37,13 +37,15 @@ void main() {
     test('should return a Cache Failure when there is no stored token',
         () async {
       //arrange
-      when(authLocalDatasource.getToken()).thenThrow(CacheFailure());
+      when(mockHiveInterface.openBox('tokens'))
+          .thenAnswer((_) async => boxToken);
+      when(boxToken.isEmpty).thenAnswer((realInvocation) => true);
 
       //act
-      final call = authLocalDatasource.getToken();
+      final call = await authLocalDatasource.getToken();
 
       //assert
-      expect(call, throwsA(isA<CacheFailure>()));
+      expect(authLocalDatasource.getToken(), throwsException);
     });
   });
 

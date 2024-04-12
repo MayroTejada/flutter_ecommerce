@@ -18,3 +18,10 @@ class SaveTokenEvent extends AuthEvent {
 class FetchTokenEvent extends AuthEvent {}
 
 class RegisterUserEvent extends AuthEvent {}
+
+class SignInEvent extends AuthEvent {
+  final String password;
+  final String username;
+
+  SignInEvent({required this.password, required this.username});
+}

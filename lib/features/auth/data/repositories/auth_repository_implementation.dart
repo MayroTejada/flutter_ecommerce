@@ -54,4 +54,10 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(Failure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, User>> signInUser(String email, String password) {
+    // TODO: implement signInUser
+    throw UnimplementedError();
+  }
 }

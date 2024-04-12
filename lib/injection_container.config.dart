@@ -21,9 +21,10 @@ import 'features/auth/data/services/auth_service.dart' as _i4;
 import 'features/auth/domain/repositories/auth_repository.dart' as _i8;
 import 'features/auth/domain/usecases/check_auth_user.dart' as _i11;
 import 'features/auth/domain/usecases/save_token.dart' as _i10;
+import 'features/auth/domain/usecases/sign_in_user.dart' as _i13;
 import 'features/auth/domain/usecases/sign_up_user.dart' as _i12;
-import 'features/auth/presentation/bloc/auth_bloc.dart' as _i13;
-import 'injection_container.dart' as _i14;
+import 'features/auth/presentation/bloc/auth_bloc.dart' as _i14;
+import 'injection_container.dart' as _i15;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -56,7 +57,9 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i11.CheckAuthUser(repository: gh<_i8.AuthRepository>()));
     gh.factory<_i12.SignUpUser>(
         () => _i12.SignUpUser(repository: gh<_i8.AuthRepository>()));
-    gh.factory<_i13.AuthBloc>(() => _i13.AuthBloc(
+    gh.factory<_i13.SignInUser>(
+        () => _i13.SignInUser(repository: gh<_i8.AuthRepository>()));
+    gh.factory<_i14.AuthBloc>(() => _i14.AuthBloc(
           checkAuthUser: gh<_i11.CheckAuthUser>(),
           saveToken: gh<_i10.SaveToken>(),
         ));
@@ -64,4 +67,4 @@ extension GetItInjectableX on _i1.GetIt {
   }
 }
 
-class _$RegisterModule extends _i14.RegisterModule {}
+class _$RegisterModule extends _i15.RegisterModule {}

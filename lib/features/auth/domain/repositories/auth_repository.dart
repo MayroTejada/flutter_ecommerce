@@ -8,4 +8,5 @@ abstract class AuthRepository {
   Future<Either<Failure, void>> saveToken(Token token);
   Future<Either<Failure, User>> signUpUser(
       String email, String password, String username);
+  Future<Either<Failure, User>> signInUser(String email, String password);
 }
