@@ -1,40 +1,46 @@
-import 'dart:convert';
-
 import 'package:flutter_ecommerce/core/failures/failure.dart';
+import 'package:flutter_ecommerce/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_ecommerce/features/auth/data/models/token_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:hive/hive.dart';
-import '../../../fixture_reader.dart';
+import 'package:mockito/mockito.dart';
+import 'authentication_local_datasource_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<HiveInterface>()])
 @GenerateNiceMocks([MockSpec<Box>()])
+@GenerateNiceMocks([MockSpec<HiveInterface>()])
 void main() {
+  late AuthLocalDatasourceImpl authLocalDatasource;
+  late Box<TokenModel> boxToken;
+  late TokenModel tokenModel;
+  late HiveInterface mockHiveInterface;
+  setUp(() {
+    tokenModel = TokenModel.fromJson({'token': 'algo'});
+    boxToken = MockBox();
+    mockHiveInterface = MockHiveInterface();
+    authLocalDatasource =
+        AuthLocalDatasourceImpl(hiveInterface: mockHiveInterface);
+  });
   group('getLastToken', () {
-    final TokenModel tTokenModel =
-        TokenModel.fromJson(jsonDecode(fixture('user_login.json')));
-
     test('should return last stored token (cached)', () async {
       //arrage
-      when(mockSecureStorage.read(key: storageDefaultAuthToken))
-          .thenAnswer((_) async => fixture('user_login.json'));
-
+      when(mockHiveInterface.openBox('tokens'))
+          .thenAnswer((_) async => boxToken);
+      when(boxToken.get('token')).thenAnswer((realInvocation) => tokenModel);
       // act
-      final result = await dataSourceImpl.getToken();
+      final result = await authLocalDatasource.getToken();
 
       //assert
-      verify(mockSecureStorage.read(key: storageDefaultAuthToken));
-      expect(result, tTokenModel);
+      verify(mockHiveInterface.openBox('tokens'));
     });
 
     test('should return a Cache Failure when there is no stored token',
         () async {
       //arrange
-      when(mockSecureStorage.read(key: storageDefaultAuthToken))
-          .thenThrow(CacheFailure());
+      when(authLocalDatasource.getToken()).thenThrow(CacheFailure());
 
       //act
-      final call = dataSourceImpl.getToken;
+      final call = authLocalDatasource.getToken();
 
       //assert
       expect(call, throwsA(isA<CacheFailure>()));
@@ -42,15 +48,14 @@ void main() {
   });
 
   group('cacheToken', () {
-    const TokenModel tTokenModel = TokenModel(accessToken: '123456');
-
     test('should store the token', () async {
+      when(mockHiveInterface.openBox('tokens'))
+          .thenAnswer((_) async => boxToken);
       //act
-      dataSourceImpl.keepCachedToken(tTokenModel);
+      authLocalDatasource.saveToken(tokenModel);
 
       //assert
-      verify(mockSecureStorage.write(
-          key: storageDefaultAuthToken, value: jsonEncode(tTokenModel)));
+      verify(mockHiveInterface.openBox('tokens'));
     });
   });
 }

@@ -1,12 +1,14 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_ecommerce/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:flutter_ecommerce/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:flutter_ecommerce/features/auth/data/models/token_model.dart';
 import 'package:flutter_ecommerce/features/auth/data/repositories/auth_repository_implementation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../datasources/authentication_local_datasource_test.mocks.dart';
 import 'authentication_repository_impl_test.mocks.dart';
 
 @GenerateNiceMocks([MockSpec<AuthLocalDatasource>()])
@@ -15,9 +17,11 @@ void main() {
   late MockAuthDatasource authDatasourceMock;
   late MockAuthLocalDatasource authLocalDatasource;
   late AuthRepositoryImpl repository;
+  late Box<TokenModel> tokenBox;
 
   setUp(() {
     authDatasourceMock = MockAuthDatasource();
+    tokenBox = MockBox()..add(TokenModel(accessToken: ''));
     authLocalDatasource = MockAuthLocalDatasource();
     repository = AuthRepositoryImpl(
         datasource: authDatasourceMock, localDatasource: authLocalDatasource);
@@ -25,8 +29,8 @@ void main() {
   group("device is offline", () {
     test('if token exists in local datasource should return void', () async {
       //arrange
-      when(authLocalDatasource.checkAuthenticateUser())
-          .thenAnswer((_) async {});
+      when(authLocalDatasource.getToken()).thenAnswer((_) async => tokenBox);
+      when(tokenBox.getAt(0)).thenAnswer((_) => TokenModel(accessToken: ''));
 
       //act
       final result = await repository.checkAuthUser();

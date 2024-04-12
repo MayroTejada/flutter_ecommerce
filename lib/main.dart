@@ -3,7 +3,6 @@ import 'package:flutter_ecommerce/injection_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> main() async {
-  await Hive.initFlutter();
   configureDependencies();
   runApp(const MyApp());
 }

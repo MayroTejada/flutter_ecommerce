@@ -7,11 +7,11 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../fixture_reader.dart';
 
 void main() {
-  const TokenModel tTokenModel = TokenModel(accessToken: "1234");
+  TokenModel tTokenModel = TokenModel(accessToken: "1234");
 
   test('should be a subclass of token entity', () async {
     //assert
-    expect(tTokenModel, isA<Token>());
+    expect(tTokenModel, isA<TokenModel>());
   });
 
   group('fromJson', () {

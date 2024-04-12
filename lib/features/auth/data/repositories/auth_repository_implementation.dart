@@ -20,8 +20,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> checkAuthUser() async {
     try {
-      await localDatasource.getToken();
-      return const Right(null);
+      var res = await localDatasource.getToken();
+      if (res.getAt(0) != null) {
+        return const Right(null);
+      } else {
+        return const Left(Failure());
+      }
     } on Exception catch (e) {
       return Left(Failure(message: e.toString()));
     }

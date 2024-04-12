@@ -1,24 +1,25 @@
 import 'package:flutter_ecommerce/features/auth/data/models/token_model.dart';
-import 'package:flutter_ecommerce/features/auth/data/service/auth_hive_service.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class AuthLocalDatasource {
-  Future<TokenModel> getToken();
+  Future<Box<TokenModel>> getToken();
   Future<void> saveToken(TokenModel tokenModel);
 }
 
 @Injectable(as: AuthLocalDatasource)
 class AuthLocalDatasourceImpl implements AuthLocalDatasource {
-  final AuthHiveService authHiveService;
+  final HiveInterface hiveInterface;
 
-  AuthLocalDatasourceImpl({required this.authHiveService});
+  AuthLocalDatasourceImpl({required this.hiveInterface});
   @override
-  Future<TokenModel> getToken() async {
-    return authHiveService.getToken();
+  Future<Box<TokenModel>> getToken() async {
+    return hiveInterface.openBox<TokenModel>('tokens');
   }
 
   @override
-  Future<void> saveToken(TokenModel tokenModel) {
-    return authHiveService.saveToken(tokenModel);
+  Future<void> saveToken(TokenModel tokenModel) async {
+    var box = await hiveInterface.openBox<TokenModel>('tokens');
+    box.get(tokenModel);
   }
 }
