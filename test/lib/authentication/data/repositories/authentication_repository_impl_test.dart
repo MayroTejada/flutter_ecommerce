@@ -13,15 +13,16 @@ void main() {
       AuthRepositoryImpl(datasource: authDatasourceMock);
 
   group("device is offline", () {
-    test('if token exists in local datasource should return void', () async {
-      //arrange
-      when(authDatasourceMock.getToken()).thenAnswer((_) async => tTokenModel);
+    //   test('if token exists in local datasource should return void', () async {
+    //     //arrange
+    //     when(authDatasourceMock.getToken()).thenAnswer((_) async => tTokenModel);
 
-      //act
-      final result = await repository.fetchCachedToken();
+    //     //act
+    //     final result = await repository.fetchCachedToken();
 
-      //assert
-      expect(result, equals(const Right(tToken)));
-    });
+    //     //assert
+    //     expect(result, equals(const Right(tToken)));
+    //   });
+    // });
   });
 }

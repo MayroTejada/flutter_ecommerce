@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter_ecommerce/core/failures/failure.dart';
 import 'package:flutter_ecommerce/features/auth/data/models/token_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:mockito/mockito.dart';
+
+import '../../../fixture_reader.dart';
 
 
 class MockHiveInterface extends Mock implements HiveInterface {}
@@ -33,13 +36,13 @@ void main() {
         () async {
       //arrange
       when(mockSecureStorage.read(key: storageDefaultAuthToken))
-          .thenThrow(CacheException());
+          .thenThrow(CacheFailure());
 
       //act
       final call = dataSourceImpl.getToken;
 
       //assert
-      expect(call, throwsA(isA<CacheException>()));
+      expect(call, throwsA(isA<CacheFailure>()));
     });
   });
 

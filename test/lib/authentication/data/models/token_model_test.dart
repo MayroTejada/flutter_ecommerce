@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter_ecommerce/features/auth/data/models/token_model.dart';
+import 'package:flutter_ecommerce/features/auth/domain/entities/token.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ikki_driver/features/authentication/data/models/token_model.dart';
-import 'package:ikki_driver/features/authentication/domain/entities/token.dart';
 
-import '../../../../fixtures/fixture_reader.dart';
+import '../../../fixture_reader.dart';
 
 void main() {
   const TokenModel tTokenModel = TokenModel(accessToken: "1234");
@@ -37,7 +37,7 @@ void main() {
       final result = TokenModel.fromJson(jsonMap);
 
       //assert
-      expect(result, equals(const TokenModel(accessToken: null)));
+      expect(result, equals(TokenModel(accessToken: '')));
     });
   });
 

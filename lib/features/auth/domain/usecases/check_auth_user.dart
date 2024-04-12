@@ -7,18 +7,18 @@ import '../../../../core/failures/failure.dart';
 import '../repositories/auth_repository.dart';
 
 @Injectable()
-class AuthenticateUser implements UseCase<void, AuthenticateUserParams> {
+class CheckAuthUser implements UseCase<void, CheckAuthUserParams> {
   final AuthRepository repository;
 
-  AuthenticateUser({required this.repository});
+  CheckAuthUser({required this.repository});
 
   @override
-  Future<Either<Failure, void>> call(AuthenticateUserParams params) async {
-    return repository.authenticateUser();
+  Future<Either<Failure, void>> call(CheckAuthUserParams params) async {
+    return repository.checkAuthUser();
   }
 }
 
-class AuthenticateUserParams extends Equatable {
+class CheckAuthUserParams extends Equatable {
   @override
   List<Object?> get props => [];
 }

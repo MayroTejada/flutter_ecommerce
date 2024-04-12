@@ -12,12 +12,18 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({required this.datasource});
 
   @override
-  Future<Either<Failure, void>> authenticateUser() async {
+  Future<Either<Failure, void>> checkAuthUser() async {
     try {
       await datasource.authenticateUser();
       return const Right(null);
     } on Exception catch (e) {
       return Left(Failure(message: e.toString()));
     }
+  }
+  
+  @override
+  Future<Either<Failure, void>> saveToken() {
+    // TODO: implement saveToken
+    throw UnimplementedError();
   }
 }

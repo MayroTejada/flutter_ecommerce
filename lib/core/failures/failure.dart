@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-class Failure extends Equatable {
+class Failure extends Equatable implements Exception {
   final int code;
   final String message;
 
@@ -14,3 +14,7 @@ class Failure extends Equatable {
   @override
   List<Object?> get props => [code, message];
 }
+
+class CacheFailure extends Failure {}
+
+class NoConectionFailure extends Failure {}
