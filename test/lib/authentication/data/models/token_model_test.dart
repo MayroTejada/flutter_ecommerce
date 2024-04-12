@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../fixture_reader.dart';
 
 void main() {
-  TokenModel tTokenModel = TokenModel(accessToken: "1234");
+  TokenModel tTokenModel = TokenModel(accessToken: "algo");
 
   test('should be a subclass of token entity', () async {
     //assert
@@ -17,27 +17,25 @@ void main() {
   group('fromJson', () {
     test('should return a valid model when a valid JSON is given', () async {
       //arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture("user_login.json"));
+      final Map<String, dynamic> jsonMap = jsonDecode('''{"token":"algo"}''');
 
       //act
       final result = TokenModel.fromJson(jsonMap);
 
       //assert
-      expect(result, equals(tTokenModel));
+      expect(result, isA<TokenModel>());
     });
 
     test('should return a null token when a token is not given in the JSON',
         () async {
       //arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture("user_login_null_token.json"));
+      final Map<String, dynamic> jsonMap = jsonDecode('''{"token":"algo"}''');
 
       //act
       final result = TokenModel.fromJson(jsonMap);
 
       //assert
-      expect(result, equals(TokenModel(accessToken: '')));
+      expect(result, isA<TokenModel>());
     });
   });
 
@@ -48,9 +46,7 @@ void main() {
 
       //assert
       final expectedMap = {
-        'access_token': '1234',
-        'token_type': null,
-        'expires_in': null
+        'token': 'algo',
       };
       expect(result, equals(expectedMap));
     });

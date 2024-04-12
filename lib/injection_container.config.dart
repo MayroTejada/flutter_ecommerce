@@ -14,14 +14,16 @@ import 'package:hive_flutter/hive_flutter.dart' as _i3;
 import 'package:injectable/injectable.dart' as _i2;
 
 import 'features/auth/data/datasources/auth_local_datasource.dart' as _i5;
-import 'features/auth/data/datasources/auth_remote_datasource.dart' as _i4;
+import 'features/auth/data/datasources/auth_remote_datasource.dart' as _i7;
 import 'features/auth/data/repositories/auth_repository_implementation.dart'
-    as _i8;
-import 'features/auth/domain/repositories/auth_repository.dart' as _i7;
-import 'features/auth/domain/usecases/check_auth_user.dart' as _i10;
-import 'features/auth/domain/usecases/save_token.dart' as _i9;
-import 'features/auth/presentation/bloc/auth_bloc.dart' as _i11;
-import 'injection_container.dart' as _i12;
+    as _i9;
+import 'features/auth/data/services/auth_service.dart' as _i4;
+import 'features/auth/domain/repositories/auth_repository.dart' as _i8;
+import 'features/auth/domain/usecases/check_auth_user.dart' as _i11;
+import 'features/auth/domain/usecases/save_token.dart' as _i10;
+import 'features/auth/domain/usecases/sign_up_user.dart' as _i12;
+import 'features/auth/presentation/bloc/auth_bloc.dart' as _i13;
+import 'injection_container.dart' as _i14;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -39,23 +41,27 @@ extension GetItInjectableX on _i1.GetIt {
       () => registerModule.hive,
       preResolve: true,
     );
-    gh.factory<_i4.AuthDatasource>(() => _i4.AuthDatasourceImpl());
+    gh.factory<_i4.FalseAuthService>(() => _i4.FalseAuthServiceImpl());
     gh.factory<_i5.AuthLocalDatasource>(() =>
         _i5.AuthLocalDatasourceImpl(hiveInterface: gh<_i6.HiveInterface>()));
-    gh.factory<_i7.AuthRepository>(() => _i8.AuthRepositoryImpl(
-          datasource: gh<_i4.AuthDatasource>(),
+    gh.factory<_i7.AuthDatasource>(() =>
+        _i7.AuthDatasourceImpl(falseAuthService: gh<_i4.FalseAuthService>()));
+    gh.factory<_i8.AuthRepository>(() => _i9.AuthRepositoryImpl(
+          remoteDataSource: gh<_i7.AuthDatasource>(),
           localDatasource: gh<_i5.AuthLocalDatasource>(),
         ));
-    gh.factory<_i9.SaveToken>(
-        () => _i9.SaveToken(repository: gh<_i7.AuthRepository>()));
-    gh.factory<_i10.CheckAuthUser>(
-        () => _i10.CheckAuthUser(repository: gh<_i7.AuthRepository>()));
-    gh.factory<_i11.AuthBloc>(() => _i11.AuthBloc(
-          checkAuthUser: gh<_i10.CheckAuthUser>(),
-          saveToken: gh<_i9.SaveToken>(),
+    gh.factory<_i10.SaveToken>(
+        () => _i10.SaveToken(repository: gh<_i8.AuthRepository>()));
+    gh.factory<_i11.CheckAuthUser>(
+        () => _i11.CheckAuthUser(repository: gh<_i8.AuthRepository>()));
+    gh.factory<_i12.SignUpUser>(
+        () => _i12.SignUpUser(repository: gh<_i8.AuthRepository>()));
+    gh.factory<_i13.AuthBloc>(() => _i13.AuthBloc(
+          checkAuthUser: gh<_i11.CheckAuthUser>(),
+          saveToken: gh<_i10.SaveToken>(),
         ));
     return this;
   }
 }
 
-class _$RegisterModule extends _i12.RegisterModule {}
+class _$RegisterModule extends _i14.RegisterModule {}

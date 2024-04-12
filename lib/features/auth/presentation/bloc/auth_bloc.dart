@@ -26,7 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     res.fold((failure) {
       emit(state.failedState('error'));
     }, (succes) {
-      emit(state.successState(User(name: 'name')));
+      emit(state.successState(User(username: 'name', id: '')));
     });
   }
 
@@ -36,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     res.fold((failure) {
       emit(state.failedState('error'));
     }, (succes) {
-      emit(state.successState(User(name: 'name')));
+      emit(state.successState(User(username: 'name', id: '')));
     });
   }
 }
